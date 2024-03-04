@@ -15,7 +15,12 @@ router.get('/user/:username', function(req, res, next) {
 });
 
 
+router.get('/info', userHandler.info);
+
 
 router.post('/login', userHandler.login);
+
+
+router.get('/logout', userHandler.logout);
 
 module.exports = router;
