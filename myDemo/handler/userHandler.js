@@ -1,5 +1,6 @@
 const e = require('express');
 var userDao = require('../db/userDao');
+const {createToken} = require('../util/jwtUtil');
 
 
 function login(req, res){
@@ -10,29 +11,34 @@ function login(req, res){
     userDao.getUserByUsername(username).then((result) => {
         if(result && result.length > 0){
             const user = result[0];
-            console.log('user: ', user);
             const userPassword = user.password;
             if(userPassword === password){
-                req.session.isLogin = true;
-                req.session.user = user;
-                res.send({status:0, msg:'登录成功！'});
+                res.send({status:0, msg:'登录成功！', data: createToken(user)});
             }else{
                 res.send({status:1, msg:'用户名或密码错误！'});
             }
         }else{
+            console.log('user not found!');
             res.send({status:1, msg:'用户名或密码错误！'});
         }
     }).catch((err) => {
-        
+        console.log('err: ', err);
         res.send({status:1, msg:'用户名或密码错误！'});
     });
 }
 
 info = (req, res) =>{
-    if(!req.session.isLogin){
+    console.log('req auth', req.auth);
+    if(!req.auth){
         res.send({status:1, msg:'请先登录！'});
     }else{
-        res.send({status:0, msg:'登录成功！', data: req.session.user});
+        const username = req.auth.username;
+        userDao.getUserByUsername(username).then((result) => {
+            res.send({status:0, msg:'登录成功！', data: result});
+        }).catch((err) => {
+            console.log('err: ', err);
+            res.send({status:1, msg:'登录成功！'});
+        });
     }
 }
 
