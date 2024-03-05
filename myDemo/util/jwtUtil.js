@@ -13,5 +13,6 @@ createToken = (user) => {
 module.exports = {
   createToken: createToken,
   jwtSecretKey: jwtSecretKey,
-  expressJwt:expressJwt.expressjwt({ secret: jwtSecretKey , algorithms: ['HS256'] })
+  expressJwt:expressJwt.expressjwt({ secret: jwtSecretKey , algorithms: ['HS256'] }),
+  UnauthorizedError: expressJwt.UnauthorizedError
 };

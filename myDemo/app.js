@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(jwtUtil.expressJwt.unless({ path: ['/api/users/login', '/api/users/logout'] }));
+app.use(jwtUtil.expressJwt.unless({ path: ['/','/api/users/login', '/api/users/logout', '/api/users/register'] }));
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
@@ -29,6 +29,13 @@ app.use('/api/users', usersRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+// app.use((err, req, res, next) => {
+//   if(err instanceof jwtUtil.UnauthorizedError){
+//     res.status(401).send({message: 'Unauthorized'});
+//   }
+//   next();
+// })
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -40,5 +47,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;

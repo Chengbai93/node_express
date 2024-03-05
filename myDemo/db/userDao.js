@@ -12,6 +12,17 @@ getUserByUsername = (username) => {
 };
 
 
+addUser = (user) => {
+    return new Promise((resolve, reject) => db.query('INSERT INTO users (username, password, salt) VALUES (?, ?, ?)', [user.username, user.password, user.salt], (err, rows) =>{
+        if (err) {
+            reject(err);
+        } else {
+            resolve(rows);
+        }
+    }))
+};
+
+
 module.exports = {
 
     getUser: function (username, password, callback) {
@@ -24,5 +35,6 @@ module.exports = {
         });
     },
 
-    getUserByUsername: getUserByUsername
+    getUserByUsername: getUserByUsername,
+    addUser: addUser
 }

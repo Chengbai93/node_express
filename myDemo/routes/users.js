@@ -14,6 +14,8 @@ router.get('/', function(req, res, next) {
 router.get('/user/:username', function(req, res, next) {
 });
 
+router.post('/register', userHandler.register);
+
 
 router.get('/info', userHandler.info);
 
